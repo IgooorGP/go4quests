@@ -1,0 +1,49 @@
+version: "3.5"
+services:
+  db:
+    image: postgres:10.1-alpine
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.dev
+#    env_file: .env
+#    volumes:
+#      - .:/build
+#    ports:
+#      - "${GIN_SERVER_TCP_SOCKET_BIND_PORT}:${GIN_SERVER_TCP_SOCKET_BIND_PORT}"
+#      - "40000:40000"
+#    depends_on:
+#      - db
+#    command: "sh start-local.sh"
+
+  integration-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: .env
+    volumes:
+      - .:/build
+    depends_on:
+      - db
+    command: "go test ./..."
+
+#  app-prd:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    env_file: .env
+#    volumes:
+#      - .:/build
+#    ports:
+#      - "${GIN_SERVER_TCP_SOCKET_BIND_PORT}:${GIN_SERVER_TCP_SOCKET_BIND_PORT}"
+#    depends_on:
+#      - db
+#    command: "/server"
