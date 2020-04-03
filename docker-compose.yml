@@ -9,7 +9,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+#
 #  app:
 #    build:
 #      context: .
@@ -22,19 +22,19 @@ services:
 #      - "40000:40000"
 #    depends_on:
 #      - db
-#    command: "sh start-local.sh"
+#    command: "sh start-docker-compose.sh"
 
-  integration-tests:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    env_file: .env
-    volumes:
-      - .:/build
-    depends_on:
-      - db
-    command: "go test ./..."
-
+#  integration-tests:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.dev
+#    env_file: .env
+#    volumes:
+#      - .:/build
+#    depends_on:
+#      - db
+#    command: "go test ./..."
+#
 #  app-prd:
 #    build:
 #      context: .
