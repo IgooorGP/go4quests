@@ -9,41 +9,28 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-#
-#  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.dev
-#    env_file: .env
-#    volumes:
-#      - .:/build
-#    ports:
-#      - "${GIN_SERVER_TCP_SOCKET_BIND_PORT}:${GIN_SERVER_TCP_SOCKET_BIND_PORT}"
-#      - "40000:40000"
-#    depends_on:
-#      - db
-#    command: "sh start-docker-compose.sh"
 
-#  integration-tests:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.dev
-#    env_file: .env
-#    volumes:
-#      - .:/build
-#    depends_on:
-#      - db
-#    command: "go test ./..."
-#
-#  app-prd:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    env_file: .env
-#    volumes:
-#      - .:/build
-#    ports:
-#      - "${GIN_SERVER_TCP_SOCKET_BIND_PORT}:${GIN_SERVER_TCP_SOCKET_BIND_PORT}"
-#    depends_on:
-#      - db
-#    command: "/server"
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: .env
+    volumes:
+      - .:/build
+    ports:
+      - "${GIN_SERVER_TCP_SOCKET_BIND_PORT}:${GIN_SERVER_TCP_SOCKET_BIND_PORT}"
+      - "40000:40000"
+    depends_on:
+      - db
+    command: "/server"  # runs app-compiled binary
+
+  integration-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: .env
+    volumes:
+      - .:/build
+    depends_on:
+      - db
+    command: "go test ./..."   # compiles and runs tests
