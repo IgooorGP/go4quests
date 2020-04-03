@@ -1,11 +1,11 @@
-package infra
+package config
 
 import (
 	"fmt"
+	"github.com/IgooorGP/go4quests/go4quests/controllers"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
-	"net/http"
 	"os"
 )
 
@@ -45,9 +45,7 @@ func LoadDotEnvIfAvailable(file string) error {
 
 // Setups the router's routes of the application
 func SetupRoutes(router *gin.Engine) {
-	router.GET("/healthcheck", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"healthy": true})
-	})
+	router.GET("/healthcheck", controllers.HealthCheckController)
 }
 
 // Setups GIN for dev or prd release
