@@ -2,17 +2,26 @@ package config
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
 	"os"
 	"path"
 )
 
-// Root path of the project: GOPATH + src/module
-var ProjectRootPath = path.Join(os.Getenv("GOPATH"), "src/github.com/IgooorGP/go4quests")
+// Attempts to read a variable from env variables. If not possible, returns the default value.
+func GetEnvValueOrUseDefault(envName string, envDefault string) string {
+	envValue, fromEnv := os.LookupEnv(envName)
 
-// Loads env vars from .env.local if available
-// For production, k8s Config map or other env source should set these variables
-var _ = LoadDotEnvIfAvailable(path.Join(ProjectRootPath, ".env"))
+	if !fromEnv {
+		return envDefault
+	}
+
+	return envValue
+}
+
+// Project root path and .env file loading (if available)
+var ProjectRootPath = path.Join(os.Getenv("GOPATH"), "src/github.com/IgooorGP/go4quests")
+var _ = godotenv.Load(path.Join(ProjectRootPath, ".env")) // loads env variables from .env file
 
 // Host and port of the app
 var SocketBindAddress = GetEnvValueOrUseDefault("GIN_SERVER_TCP_SOCKET_BIND_ADDRESS", "0.0.0.0")
