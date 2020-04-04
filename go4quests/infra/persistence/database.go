@@ -3,6 +3,7 @@ package persistence
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func CreateDatabaseConnection(
@@ -18,7 +19,6 @@ func CreateDatabaseConnection(
 		password,
 		sslMode,
 	)
-
 	db, err := gorm.Open(engine, DatabaseURL)
 
 	// unable to proceed if we cannot connect to the database
