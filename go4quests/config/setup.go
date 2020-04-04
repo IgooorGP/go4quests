@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/IgooorGP/go4quests/go4quests/controllers"
+	"github.com/IgooorGP/go4quests/go4quests/infra/persistence"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
@@ -75,6 +76,17 @@ func SetupApplication() (*gin.Engine, string) {
 
 	// Setups logs
 	SetupLogs(logLevel, loggingLevelMap)
+
+	// Database setup
+	_ = persistence.CreateDatabaseConnection(
+		DatabaseEngine,
+		DatabaseHost,
+		DatabasePort,
+		DatabaseName,
+		DatabaseAppUser,
+		DatabaseAppPassword,
+		DatabaseUseSSL,
+	)
 
 	// Setups routes
 	applicationRouter := gin.Default()
