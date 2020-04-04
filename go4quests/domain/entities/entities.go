@@ -6,8 +6,8 @@ type Employee struct {
 	FirstName                  string                       `gorm:"size:150; not null;"`
 	LastName                   string                       `gorm:"size:150; not null;"`
 	Level                      int                          `gorm:"default:1; not null;"` // level one as the initial one
-	EarnedPointsTransactions   []EarnedPointsTransactions   // one-to-many positive transactions
-	ConsumedPointsTransactions []ConsumedPointsTransactions // one-to-many negative transactions
+	EarnedPointsTransactions   []EarnedPointsTransactions   `gorm:"not null"`             // one-to-many positive transactions
+	ConsumedPointsTransactions []ConsumedPointsTransactions `gorm:"not null"`             // one-to-many negative transactions
 }
 
 // Model of a quest that can bring points to employees
