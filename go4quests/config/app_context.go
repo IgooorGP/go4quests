@@ -13,6 +13,15 @@ var _ = LoadDotEnvIfAvailable(".env")
 var SocketBindAddress = GetEnvValueOrUseDefault("GIN_SERVER_TCP_SOCKET_BIND_ADDRESS", "0.0.0.0")
 var SocketBindPort = GetEnvValueOrUseDefault("GIN_SERVER_TCP_SOCKET_BIND_PORT", "8080")
 
+// Database configurations
+var DatabaseEngine = GetEnvValueOrUseDefault("DB_ENGINE", "postgres")
+var DatabaseHost = GetEnvValueOrUseDefault("DB_HOST", "localhost")
+var DatabasePort = GetEnvValueOrUseDefault("DB_PORT", "5432")
+var DatabaseName = GetEnvValueOrUseDefault("DB_NAME", "")
+var DatabaseAppUser = GetEnvValueOrUseDefault("DB_USER", "")
+var DatabaseAppPassword = GetEnvValueOrUseDefault("DB_PASSWORD", "")
+var DatabaseUseSSL = GetEnvValueOrUseDefault("DB_SSL", "disable")
+
 // Gin mode config
 var GinMode = GetEnvValueOrUseDefault("GIN_MODE", "debug")
 var GinModeMap = map[string]string{

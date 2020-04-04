@@ -4,6 +4,10 @@ services:
     image: postgres:10.1-alpine
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres_dev
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_PASSWORD=postgres_password
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
