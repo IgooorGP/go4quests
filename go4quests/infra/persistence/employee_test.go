@@ -1,18 +1,18 @@
-package repositories
+package persistence
 
 import (
 	"github.com/IgooorGP/go4quests/go4quests/domain/entities"
-	"github.com/IgooorGP/go4quests/go4quests/infra/persistence"
-	"github.com/IgooorGP/go4quests/tests"
 	"github.com/go-playground/assert/v2"
 	"testing"
 )
 
-// Asserts
-func TestSaveEmployee_Success(t *testing.T) {
+func TestSaveEmployee_ShouldSuccessfullyCreateEmployee(t *testing.T) {
 
-	// test scenario
-	db := tests.CreateTestDatabase()
+	// test scenario: relation creation + seeds + deferred conn close
+	db := CreateDatabaseConnectionWithAppContext()
+	db.conn.AutoMigrate(entities.Employee{})
+	defer db.conn.Close()
+
 	employee := &entities.Employee{
 		FirstName:                  "i",
 		LastName:                   "gp",
@@ -22,7 +22,7 @@ func TestSaveEmployee_Success(t *testing.T) {
 	}
 
 	// repository method invocation
-	employeeRepository := persistence.NewEmployeeRepository(db)
+	employeeRepository := NewEmployeeRepository(db.conn)
 
 	// assertions
 	savedEmployee, _ := employeeRepository.SaveEmployee(employee)
