@@ -1,25 +1,13 @@
-package config
+package infra
 
 import (
 	"fmt"
+	"github.com/IgooorGP/go4quests/go4quests/config"
 	"github.com/IgooorGP/go4quests/go4quests/controllers"
 	"github.com/IgooorGP/go4quests/go4quests/infra/persistence"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
-	"os"
 )
-
-// Attempts to read a variable from env variables. If not possible, returns the default value.
-func GetEnvValueOrUseDefault(envName string, envDefault string) string {
-	envValue, fromEnv := os.LookupEnv(envName)
-
-	if !fromEnv {
-		return envDefault
-	}
-
-	return envValue
-}
 
 // Setups the logs of the application: level, format, etc.
 func SetupLogs(loggingLevelRaw string, loggingLevelMap map[string]zerolog.Level) {
@@ -31,17 +19,6 @@ func SetupLogs(loggingLevelRaw string, loggingLevelMap map[string]zerolog.Level)
 	}
 
 	zerolog.SetGlobalLevel(loggingLevel)
-}
-
-// Sets env variables from .env.local file, if present
-func LoadDotEnvIfAvailable(file string) error {
-	err := godotenv.Load(file)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // Setups the router's routes of the application
@@ -64,12 +41,12 @@ func SetupGin(ginModeRaw string, ginModeMap map[string]string) {
 // Bootstraps (setups) the main application.
 func SetupApplication() (*gin.Engine, string) {
 	// Global config variables access
-	ginMode := GinMode
-	bindAddress := SocketBindAddress
-	bindPort := SocketBindPort
-	logLevel := LogLevel
-	loggingLevelMap := LoggingLevelMap
-	ginModeMap := GinModeMap
+	ginMode := config.GinMode
+	bindAddress := config.SocketBindAddress
+	bindPort := config.SocketBindPort
+	logLevel := config.LogLevel
+	loggingLevelMap := config.LoggingLevelMap
+	ginModeMap := config.GinModeMap
 
 	// Setups Gin for prd ou dev
 	SetupGin(ginMode, ginModeMap)
@@ -79,13 +56,13 @@ func SetupApplication() (*gin.Engine, string) {
 
 	// Database setup
 	_ = persistence.CreateDatabaseConnection(
-		DatabaseEngine,
-		DatabaseHost,
-		DatabasePort,
-		DatabaseName,
-		DatabaseAppUser,
-		DatabaseAppPassword,
-		DatabaseUseSSL,
+		config.DatabaseEngine,
+		config.DatabaseHost,
+		config.DatabasePort,
+		config.DatabaseName,
+		config.DatabaseAppUser,
+		config.DatabaseAppPassword,
+		config.DatabaseUseSSL,
 	)
 
 	// Setups routes

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/IgooorGP/go4quests/go4quests/config"
+	"github.com/IgooorGP/go4quests/go4quests/infra"
 )
 
 func main() {
-	server, tcpSocketAddressAndPort := config.SetupApplication()
+	server, tcpSocketAddressAndPort := infra.SetupApplication()
 	server.Run(tcpSocketAddressAndPort)
 }
