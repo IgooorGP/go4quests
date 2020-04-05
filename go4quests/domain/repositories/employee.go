@@ -2,13 +2,12 @@ package repositories
 
 import (
 	"github.com/IgooorGP/go4quests/go4quests/domain/entities"
-	uuid "github.com/satori/go.uuid"
 )
 
 // Repository for Employee entity interaction with database
-type EmployeeRepository interface {
+type IEmployeeRepository interface {
 	SaveEmployee(employee *entities.Employee) (*entities.Employee, error)
-	GetEmployee(uuid uuid.UUID) (*entities.Employee, error)
+	GetEmployeeByID(id int) (*entities.Employee, error)
 
 	// TODO: implement later
 	// GetAllEmployee() ([]entities.Employee, error)
