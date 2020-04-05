@@ -45,3 +45,10 @@ func (database *Database) Connect() {
 	// sets the database connection on the struct
 	database.Conn = conn
 }
+
+// convenience method to disconnect
+func (database *Database) Disconnect() {
+	if database.Conn != nil {
+		database.Conn.Close()
+	}
+}

@@ -13,7 +13,7 @@ func TestSaveEmployee_ShouldSuccessfullyCreateEmployee(t *testing.T) {
 	db := NewDatabase(config.DBConfig)
 	db.Connect()
 	db.Conn.AutoMigrate(&entities.Employee{})
-	defer db.Conn.Close()
+	defer db.Disconnect()
 
 	employee := &entities.Employee{
 		FirstName:                  "i",
