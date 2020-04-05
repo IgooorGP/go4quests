@@ -32,15 +32,16 @@ func (employeeRepository *EmployeeRepository) GetEmployeeByID(id uint64) (*entit
 
 	err := employeeRepository.database.Conn.Where(sqlQueryWhere, id).First(employee).Error
 
-	if err != nil {
-		if gorm.IsRecordNotFoundError(err) {
-			// maybe employee was not found by that ID
-			return nil, err
-		} else {
-			// unexpected error
-			panic(err)
-		}
+	// When ID was not found
+	if err != nil && gorm.IsRecordNotFoundError(err) {
+		return nil, err
 	}
 
+	// Unexpected db error
+	if err != nil {
+		panic(err)
+	}
+
+	// record was found
 	return employee, nil
 }
