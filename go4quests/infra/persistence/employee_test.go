@@ -1,6 +1,7 @@
 package persistence
 
 import (
+	"github.com/IgooorGP/go4quests/go4quests/config"
 	"github.com/IgooorGP/go4quests/go4quests/domain/entities"
 	"github.com/go-playground/assert/v2"
 	"testing"
@@ -9,9 +10,10 @@ import (
 func TestSaveEmployee_ShouldSuccessfullyCreateEmployee(t *testing.T) {
 
 	// test scenario: relation creation + seeds + deferred conn close
-	db := CreateDatabaseConnectionWithAppContext()
-	db.conn.AutoMigrate(entities.Employee{})
-	defer db.conn.Close()
+	db := NewDatabase(config.DBConfig)
+	db.Connect()
+	db.Conn.AutoMigrate(&entities.Employee{})
+	defer db.Conn.Close()
 
 	employee := &entities.Employee{
 		FirstName:                  "i",
@@ -22,7 +24,7 @@ func TestSaveEmployee_ShouldSuccessfullyCreateEmployee(t *testing.T) {
 	}
 
 	// repository method invocation
-	employeeRepository := NewEmployeeRepository(db.conn)
+	employeeRepository := NewEmployeeRepository(db)
 
 	// assertions
 	savedEmployee, _ := employeeRepository.SaveEmployee(employee)

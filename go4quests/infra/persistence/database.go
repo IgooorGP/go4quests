@@ -9,51 +9,39 @@ import (
 
 // Database abstraction with migration facility
 type Database struct {
-	conn *gorm.DB
+	DatabaseConfig config.DatabaseConfig
+	Conn           *gorm.DB
 }
 
-func (database *Database) Migrate(model interface{}) error {
-	err := database.conn.AutoMigrate(model).Error
+// Database interface creation
+func NewDatabase(databaseConfig config.DatabaseConfig) *Database {
+	database := &Database{DatabaseConfig: databaseConfig, Conn: nil}
 
-	return err
+	return database
 }
 
-func CreateDatabaseConnection(
-	engine string, host string, port string,
-	dbName string, user string, password string, sslMode string,
-) *gorm.DB {
+// shortcut to connect to the database
+func (database *Database) Connect() {
+	databaseConfig := database.DatabaseConfig
+
 	// Url connection string
 	var DatabaseURL = fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		host,
-		port,
-		user,
-		dbName,
-		password,
-		sslMode,
+		databaseConfig.DatabaseHost,
+		databaseConfig.DatabasePort,
+		databaseConfig.DatabaseUser,
+		databaseConfig.DatabaseName,
+		databaseConfig.DatabasePassword,
+		databaseConfig.DatabaseUseSSL,
 	)
-	db, err := gorm.Open(engine, DatabaseURL)
+
+	// actual connection to the database server
+	conn, err := gorm.Open(databaseConfig.DatabaseEngine, DatabaseURL)
 
 	// unable to proceed if we cannot connect to the database
 	if err != nil {
 		panic(err)
 	}
 
-	return db
-}
-
-// Wrapper on top of CreateDatabaseConnection that uses app context's env variables to open the connection
-func CreateDatabaseConnectionWithAppContext() *Database {
-	db := CreateDatabaseConnection(
-		config.DatabaseEngine,
-		config.DatabaseHost,
-		config.DatabasePort,
-		config.DatabaseName,
-		config.DatabaseAppUser,
-		config.DatabaseAppPassword,
-		config.DatabaseUseSSL,
-	)
-
-	databaseWrapper := &Database{conn: db}
-
-	return databaseWrapper
+	// sets the database connection on the struct
+	database.Conn = conn
 }
