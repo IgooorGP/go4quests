@@ -49,6 +49,8 @@ func (database *Database) Connect() {
 // convenience method to disconnect
 func (database *Database) Disconnect() {
 	if database.Conn != nil {
-		database.Conn.Close()
+		if err := database.Conn.Close(); err != nil {
+			panic(err)
+		}
 	}
 }
