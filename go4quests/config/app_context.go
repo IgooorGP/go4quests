@@ -19,6 +19,17 @@ func GetEnvValueOrUseDefault(envName string, envDefault string) string {
 	return envValue
 }
 
+// Configuration struct's
+type DatabaseConfig struct {
+	DatabaseEngine   string
+	DatabaseHost     string
+	DatabasePort     string
+	DatabaseName     string
+	DatabaseUser     string
+	DatabasePassword string
+	DatabaseUseSSL   string
+}
+
 // Project root path and .env file loading (if available)
 var ProjectRootPath = path.Join(os.Getenv("GOPATH"), "src/github.com/IgooorGP/go4quests")
 var _ = godotenv.Load(path.Join(ProjectRootPath, ".env")) // loads env variables from .env file
@@ -28,13 +39,15 @@ var SocketBindAddress = GetEnvValueOrUseDefault("GIN_SERVER_TCP_SOCKET_BIND_ADDR
 var SocketBindPort = GetEnvValueOrUseDefault("GIN_SERVER_TCP_SOCKET_BIND_PORT", "8080")
 
 // Database configurations
-var DatabaseEngine = GetEnvValueOrUseDefault("DB_ENGINE", "postgres")
-var DatabaseHost = GetEnvValueOrUseDefault("DB_HOST", "localhost")
-var DatabasePort = GetEnvValueOrUseDefault("DB_PORT", "5432")
-var DatabaseName = GetEnvValueOrUseDefault("DB_NAME", "")
-var DatabaseAppUser = GetEnvValueOrUseDefault("DB_USER", "")
-var DatabaseAppPassword = GetEnvValueOrUseDefault("DB_PASSWORD", "")
-var DatabaseUseSSL = GetEnvValueOrUseDefault("DB_SSL", "disable")
+var DBConfig = DatabaseConfig{
+	DatabaseEngine:   GetEnvValueOrUseDefault("DB_ENGINE", "postgres"),
+	DatabaseHost:     GetEnvValueOrUseDefault("DB_HOST", "localhost"),
+	DatabasePort:     GetEnvValueOrUseDefault("DB_PORT", "5432"),
+	DatabaseName:     GetEnvValueOrUseDefault("DB_NAME", ""),
+	DatabaseUser:     GetEnvValueOrUseDefault("DB_USER", ""),
+	DatabasePassword: GetEnvValueOrUseDefault("DB_PASSWORD", ""),
+	DatabaseUseSSL:   GetEnvValueOrUseDefault("DB_SSL", "disable"),
+}
 
 // Gin mode config
 var GinMode = GetEnvValueOrUseDefault("GIN_MODE", "debug")

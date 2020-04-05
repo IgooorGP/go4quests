@@ -55,15 +55,7 @@ func SetupApplication() (*gin.Engine, string) {
 	SetupLogs(logLevel, loggingLevelMap)
 
 	// Database setup
-	_ = persistence.CreateDatabaseConnection(
-		config.DatabaseEngine,
-		config.DatabaseHost,
-		config.DatabasePort,
-		config.DatabaseName,
-		config.DatabaseAppUser,
-		config.DatabaseAppPassword,
-		config.DatabaseUseSSL,
-	)
+	_ = persistence.NewDatabase(config.DBConfig)
 
 	// Setups routes
 	applicationRouter := gin.Default()
